@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Play, Pause, RotateCcw, Coffee, Brain } from 'lucide-react';
 import { formatTime, minutesToSeconds } from '../utils/time';
 import { AudioControls } from './AudioControls';
-import { audioManager, musicTracks, noiseTracks } from '../utils/audio';
+import { audioManager, musicTracks, noiseTracks, loadAudioSelections, saveAudioSelections } from '../utils/audio';
 
 type TimerMode = 'work' | 'break';
 
@@ -15,8 +15,41 @@ export function Timer({ workTime, breakTime }: TimerProps) {
   const [timeLeft, setTimeLeft] = useState(minutesToSeconds(workTime));
   const [isRunning, setIsRunning] = useState(false);
   const [mode, setMode] = useState<TimerMode>('work');
-  const [selectedMusic, setSelectedMusic] = useState('');
-  const [selectedNoise, setSelectedNoise] = useState('');
+  const [selectedMusic, setSelectedMusic] = useState(loadAudioSelections().music);
+  const [selectedNoise, setSelectedNoise] = useState(loadAudioSelections().noise);
+
+  // Handle audio playback based on mode and timer state
+  useEffect(() => {
+    if (mode === 'work' && isRunning) {
+      if (selectedMusic) {
+        const track = musicTracks.find(t => t.id === selectedMusic);
+        if (track) audioManager.playMusic(track.url);
+      }
+      if (selectedNoise) {
+        const track = noiseTracks.find(t => t.id === selectedNoise);
+        if (track) audioManager.playNoise(track.url);
+      }
+    } else {
+      audioManager.stopAll();
+    }
+  }, [mode, isRunning, selectedMusic, selectedNoise]);
+
+  // Add user interaction handler for mobile audio
+  useEffect(() => {
+    const handleUserInteraction = () => {
+      if (mode === 'work' && isRunning) {
+        audioManager.resumeAudio();
+      }
+    };
+
+    document.addEventListener('click', handleUserInteraction);
+    document.addEventListener('touchstart', handleUserInteraction);
+
+    return () => {
+      document.removeEventListener('click', handleUserInteraction);
+      document.removeEventListener('touchstart', handleUserInteraction);
+    };
+  }, [mode, isRunning]);
 
   useEffect(() => {
     setTimeLeft(minutesToSeconds(mode === 'work' ? workTime : breakTime));
@@ -24,24 +57,34 @@ export function Timer({ workTime, breakTime }: TimerProps) {
 
   const handleMusicChange = (trackId: string) => {
     setSelectedMusic(trackId);
-    if (trackId && mode === 'work') {
+    saveAudioSelections({ music: trackId, noise: selectedNoise });
+    if (trackId && mode === 'work' && isRunning) {
       const track = musicTracks.find(t => t.id === trackId);
       if (track) {
         audioManager.playMusic(track.url);
       }
-    } else {
+    } else if (!trackId) {
       audioManager.stopMusic();
     }
   };
 
+  const handleMusicVolumeChange = (volume: number) => {
+    audioManager.setMusicVolume(volume);
+  };
+
+  const handleNoiseVolumeChange = (volume: number) => {
+    audioManager.setNoiseVolume(volume);
+  };
+
   const handleNoiseChange = (trackId: string) => {
     setSelectedNoise(trackId);
-    if (trackId && mode === 'work') {
+    saveAudioSelections({ music: selectedMusic, noise: trackId });
+    if (trackId && mode === 'work' && isRunning) {
       const track = noiseTracks.find(t => t.id === trackId);
       if (track) {
         audioManager.playNoise(track.url);
       }
-    } else {
+    } else if (!trackId) {
       audioManager.stopNoise();
     }
   };
@@ -52,7 +95,7 @@ export function Timer({ workTime, breakTime }: TimerProps) {
 
   const resetTimer = () => {
     setTimeLeft(minutesToSeconds(mode === 'work' ? workTime : breakTime));
-    setIsRunning(true); // Automatically start the timer after reset
+    setIsRunning(true);
   };
 
   const switchMode = () => {
@@ -60,21 +103,7 @@ export function Timer({ workTime, breakTime }: TimerProps) {
     setMode(newMode);
     setTimeLeft(minutesToSeconds(newMode === 'work' ? workTime : breakTime));
     setIsRunning(false);
-
-    // Stop audio during break time
-    if (newMode === 'break') {
-      audioManager.stopAll();
-    } else {
-      // Resume audio if selected when switching back to work mode
-      if (selectedMusic) {
-        const track = musicTracks.find(t => t.id === selectedMusic);
-        if (track) audioManager.playMusic(track.url);
-      }
-      if (selectedNoise) {
-        const track = noiseTracks.find(t => t.id === selectedNoise);
-        if (track) audioManager.playNoise(track.url);
-      }
-    }
+    audioManager.stopAll();
   };
 
   useEffect(() => {
@@ -88,13 +117,11 @@ export function Timer({ workTime, breakTime }: TimerProps) {
       setIsRunning(false);
       const audio = new Audio('https://actions.google.com/sounds/v1/alarms/beep_short.ogg');
       audio.play();
-      if (mode === 'work') {
-        audioManager.stopAll();
-      }
+      audioManager.stopAll();
     }
 
     return () => clearInterval(interval);
-  }, [isRunning, timeLeft, mode]);
+  }, [isRunning, timeLeft]);
 
   const { minutes, seconds } = formatTime(timeLeft);
 
@@ -148,6 +175,8 @@ export function Timer({ workTime, breakTime }: TimerProps) {
           selectedNoise={selectedNoise}
           onMusicChange={handleMusicChange}
           onNoiseChange={handleNoiseChange}
+          onMusicVolumeChange={handleMusicVolumeChange}
+          onNoiseVolumeChange={handleNoiseVolumeChange}
         />
       </div>
     </div>

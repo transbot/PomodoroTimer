@@ -7,6 +7,8 @@ interface AudioControlsProps {
   selectedNoise: string;
   onMusicChange: (trackId: string) => void;
   onNoiseChange: (trackId: string) => void;
+  onMusicVolumeChange: (volume: number) => void;
+  onNoiseVolumeChange: (volume: number) => void;
 }
 
 export function AudioControls({
@@ -14,6 +16,8 @@ export function AudioControls({
   selectedNoise,
   onMusicChange,
   onNoiseChange,
+  onMusicVolumeChange,
+  onNoiseVolumeChange,
 }: AudioControlsProps) {
   return (
     <div className="space-y-4">
@@ -32,6 +36,14 @@ export function AudioControls({
               </option>
             ))}
           </select>
+          <input
+            type="range"
+            min="0"
+            max="100"
+            defaultValue="50"
+            className="ml-4 w-24"
+            onChange={(e) => onMusicVolumeChange(Number(e.target.value) / 100)}
+          />
         </div>
       </div>
 
@@ -50,6 +62,14 @@ export function AudioControls({
               </option>
             ))}
           </select>
+          <input
+            type="range"
+            min="0"
+            max="100"
+            defaultValue="30"
+            className="ml-4 w-24"
+            onChange={(e) => onNoiseVolumeChange(Number(e.target.value) / 100)}
+          />
         </div>
       </div>
     </div>
