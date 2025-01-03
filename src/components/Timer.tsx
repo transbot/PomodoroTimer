@@ -116,8 +116,13 @@ export function Timer({ workTime, breakTime }: TimerProps) {
     } else if (timeLeft === 0) {
       setIsRunning(false);
       const audio = new Audio('https://actions.google.com/sounds/v1/alarms/beep_short.ogg');
-      audio.play();
       audioManager.stopAll();
+      audio.play();
+      const newMode = mode === 'work' ? 'break' : 'work';
+      setMode(newMode);
+      setTimeLeft(minutesToSeconds(newMode === 'work' ? workTime : breakTime));
+      // Don't auto-start when switching back to work mode
+      setIsRunning(false);
     }
 
     return () => clearInterval(interval);
