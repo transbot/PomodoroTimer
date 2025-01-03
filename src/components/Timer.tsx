@@ -3,6 +3,7 @@ import { Play, Pause, RotateCcw, Coffee, Brain } from 'lucide-react';
 import { formatTime, minutesToSeconds } from '../utils/time';
 import { AudioControls } from './AudioControls';
 import { audioManager, musicTracks, noiseTracks, loadAudioSelections, saveAudioSelections } from '../utils/audio';
+import { useLanguage } from '../contexts/LanguageContext';
 
 type TimerMode = 'work' | 'break';
 
@@ -12,6 +13,8 @@ interface TimerProps {
 }
 
 export function Timer({ workTime, breakTime }: TimerProps) {
+  const { t } = useLanguage();
+
   const [timeLeft, setTimeLeft] = useState(minutesToSeconds(workTime));
   const [isRunning, setIsRunning] = useState(false);
   const [mode, setMode] = useState<TimerMode>('work');
@@ -102,7 +105,7 @@ export function Timer({ workTime, breakTime }: TimerProps) {
     const newMode = mode === 'work' ? 'break' : 'work';
     setMode(newMode);
     setTimeLeft(minutesToSeconds(newMode === 'work' ? workTime : breakTime));
-    setIsRunning(false);
+    setIsRunning(true);
     audioManager.stopAll();
   };
 
@@ -118,11 +121,11 @@ export function Timer({ workTime, breakTime }: TimerProps) {
       const audio = new Audio('https://actions.google.com/sounds/v1/alarms/beep_short.ogg');
       audioManager.stopAll();
       audio.play();
+      
       const newMode = mode === 'work' ? 'break' : 'work';
       setMode(newMode);
       setTimeLeft(minutesToSeconds(newMode === 'work' ? workTime : breakTime));
-      // Don't auto-start when switching back to work mode
-      setIsRunning(false);
+      setIsRunning(true);
     }
 
     return () => clearInterval(interval);
@@ -144,12 +147,12 @@ export function Timer({ workTime, breakTime }: TimerProps) {
           {mode === 'work' ? (
             <>
               <Brain size={20} />
-              <span>Work Time</span>
+              <span>{t('workTime')}</span>
             </>
           ) : (
             <>
               <Coffee size={20} />
-              <span>Break Time</span>
+              <span>{t('breakTime')}</span>
             </>
           )}
         </button>

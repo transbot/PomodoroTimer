@@ -1,6 +1,7 @@
 import React from 'react';
 import { Music, Waves } from 'lucide-react';
 import { AudioTrack, musicTracks, noiseTracks } from '../utils/audio';
+import { useLanguage } from '../contexts/LanguageContext';
 
 interface AudioControlsProps {
   selectedMusic: string;
@@ -19,6 +20,8 @@ export function AudioControls({
   onMusicVolumeChange,
   onNoiseVolumeChange,
 }: AudioControlsProps) {
+  const { t } = useLanguage();
+
   return (
     <div className="space-y-4">
       <div className="flex items-center space-x-4">
@@ -29,7 +32,7 @@ export function AudioControls({
             onChange={(e) => onMusicChange(e.target.value)}
             className="flex-1 px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
           >
-            <option value="">No Background Music</option>
+            <option value="">{t('noBackgroundMusic')}</option>
             {musicTracks.map((track: AudioTrack) => (
               <option key={track.id} value={track.id}>
                 {track.name}
@@ -55,7 +58,7 @@ export function AudioControls({
             onChange={(e) => onNoiseChange(e.target.value)}
             className="flex-1 px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
           >
-            <option value="">No White Noise</option>
+            <option value="">{t('noWhiteNoise')}</option>
             {noiseTracks.map((track: AudioTrack) => (
               <option key={track.id} value={track.id}>
                 {track.name}

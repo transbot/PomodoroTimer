@@ -2,8 +2,13 @@ import React, { useState } from 'react';
 import { Timer } from './components/Timer';
 import { TimerSettings } from './components/TimerSettings';
 import { Clock } from 'lucide-react';
+import { LanguageProvider } from './contexts/LanguageContext';
+import { LanguageSwitch } from './components/LanguageSwitch';
+import { useLanguage } from './contexts/LanguageContext';
 
-function App() {
+function AppContent() {
+  const { t } = useLanguage();
+
   const [workTime, setWorkTime] = useState(25);
   const [breakTime, setBreakTime] = useState(5);
 
@@ -12,13 +17,12 @@ function App() {
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-2xl mx-auto bg-white rounded-xl shadow-lg p-8">
           <div className="text-center mb-8">
-            <div className="flex items-center justify-center mb-4">
+            <div className="flex items-center justify-center space-x-4 mb-4">
               <Clock className="w-8 h-8 text-red-500 mr-2" />
-              <h1 className="text-3xl font-bold text-gray-800">Pomodoro Timer</h1>
+              <h1 className="text-3xl font-bold text-gray-800">{t('title')}</h1>
+              <LanguageSwitch />
             </div>
-            <p className="text-gray-600">
-              Stay focused and productive with the Pomodoro Technique
-            </p>
+            <p className="text-gray-600">{t('subtitle')}</p>
           </div>
           
           <Timer workTime={workTime} breakTime={breakTime} />
@@ -34,6 +38,14 @@ function App() {
         </div>
       </div>
     </div>
+  );
+}
+
+function App() {
+  return (
+    <LanguageProvider>
+      <AppContent />
+    </LanguageProvider>
   );
 }
 
