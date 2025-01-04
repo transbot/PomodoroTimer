@@ -5,6 +5,7 @@ import { Clock } from 'lucide-react';
 import { LanguageProvider } from './contexts/LanguageContext';
 import { LanguageSwitch } from './components/LanguageSwitch';
 import { useLanguage } from './contexts/LanguageContext';
+import { ZodiacBackground } from './components/ZodiacBackground';
 
 function AppContent() {
   const { t } = useLanguage();
@@ -14,6 +15,7 @@ function AppContent() {
 
   return (
     <div className="min-h-screen bg-gray-100">
+      <ZodiacBackground />
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-2xl mx-auto bg-white rounded-xl shadow-lg p-8">
           <div className="text-center mb-8">
