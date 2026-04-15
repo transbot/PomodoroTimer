@@ -1,6 +1,8 @@
 export * from './types';
-export { supabase, isSupabaseConfigured } from './supabase';
+export { supabase, isSupabaseConfigured, signInAnonymously, getAuthUserId, getSession } from './supabase';
 export {
+  initializeAuth,
+  getCurrentAuthUserId,
   getOrCreateUserId,
   getCurrentUserId,
   registerUser,

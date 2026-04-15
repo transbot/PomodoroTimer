@@ -1,12 +1,54 @@
-import { supabase, isSupabaseConfigured } from './supabase';
+import { supabase, isSupabaseConfigured, signInAnonymously, getAuthUserId } from './supabase';
 import { CloudUser } from './types';
 
 const STORAGE_KEY = 'tomatoclock-user-id';
 
 /**
- * Get or create a local user ID (UUID)
+ * Initialize anonymous auth and get user ID
+ * Uses Supabase Auth for secure user identification
  */
-export function getOrCreateUserId(): string {
+export async function initializeAuth(): Promise<string | null> {
+  if (!isSupabaseConfigured()) {
+    // Fallback to local UUID if Supabase not configured
+    return getOrCreateLocalUserId();
+  }
+
+  try {
+    const session = await signInAnonymously();
+    if (session?.user) {
+      // Store mapping for quick access
+      localStorage.setItem(STORAGE_KEY, session.user.id);
+      return session.user.id;
+    }
+    return null;
+  } catch (error) {
+    console.error('Failed to initialize auth:', error);
+    return getOrCreateLocalUserId();
+  }
+}
+
+/**
+ * Get current authenticated user ID
+ */
+export async function getCurrentAuthUserId(): Promise<string | null> {
+  if (!isSupabaseConfigured()) {
+    return localStorage.getItem(STORAGE_KEY);
+  }
+
+  const authId = await getAuthUserId();
+  if (authId) {
+    localStorage.setItem(STORAGE_KEY, authId);
+    return authId;
+  }
+
+  // Try to initialize if not authenticated
+  return initializeAuth();
+}
+
+/**
+ * Fallback: Get or create a local user ID (UUID)
+ */
+export function getOrCreateLocalUserId(): string {
   let userId = localStorage.getItem(STORAGE_KEY);
 
   if (!userId) {
@@ -15,6 +57,15 @@ export function getOrCreateUserId(): string {
   }
 
   return userId;
+}
+
+/**
+ * Get the current user ID (sync, for backward compatibility)
+ */
+export function getOrCreateUserId(): string {
+  const stored = localStorage.getItem(STORAGE_KEY);
+  if (stored) return stored;
+  return getOrCreateLocalUserId();
 }
 
 /**

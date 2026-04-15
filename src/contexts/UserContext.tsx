@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useState, useCallback } from 'react';
 import {
-  getOrCreateUserId,
+  initializeAuth,
+  getCurrentAuthUserId,
   registerUser,
   getUser,
   isSupabaseConfigured,
@@ -31,13 +32,19 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
     }
 
     try {
-      const id = getOrCreateUserId();
-      setUserId(id);
+      // Initialize anonymous auth
+      const authId = await initializeAuth();
+      if (!authId) {
+        setIsLoading(false);
+        return;
+      }
 
-      // Try to get or register user
-      let user = await getUser(id);
+      setUserId(authId);
+
+      // Try to get or register user profile
+      let user = await getUser(authId);
       if (!user) {
-        user = await registerUser(id);
+        user = await registerUser(authId);
       }
       setCloudUser(user);
     } catch (error) {

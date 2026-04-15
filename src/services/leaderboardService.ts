@@ -1,4 +1,4 @@
-import { supabase, isSupabaseConfigured } from './supabase';
+import { supabase, isSupabaseConfigured, getAuthUserId } from './supabase';
 import { getOrCreateUserId, generateDefaultDisplayName } from './userService';
 import { LeaderboardEntry, LeaderboardCategory, CloudUserStats } from './types';
 import { UserStats, loadUserStats } from '../utils/statistics';
@@ -12,7 +12,7 @@ export async function syncStats(): Promise<boolean> {
     return false;
   }
 
-  const userId = getOrCreateUserId();
+  const userId = await getAuthUserId() || getOrCreateUserId();
   const stats = loadUserStats();
 
   try {
@@ -63,7 +63,7 @@ export async function getLeaderboard(
     return [];
   }
 
-  const currentUserId = getOrCreateUserId();
+  const currentUserId = await getAuthUserId() || getOrCreateUserId();
   const showFakeUsers = isDevelopment();
 
   try {
@@ -125,7 +125,7 @@ export async function getUserRank(category: LeaderboardCategory = 'level'): Prom
     return null;
   }
 
-  const userId = getOrCreateUserId();
+  const userId = await getAuthUserId() || getOrCreateUserId();
   const showFakeUsers = isDevelopment();
 
   try {
