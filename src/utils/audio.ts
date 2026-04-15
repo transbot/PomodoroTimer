@@ -39,6 +39,38 @@ export const musicTracks: AudioTrack[] = [
       zh: '舒缓的音乐#4'
     },
     url: '/audio/lofi4.mp3'
+  },
+  {
+    id: 'lofi5',
+    name: {
+      en: 'Relaxing Music #5',
+      zh: '舒缓的音乐#5'
+    },
+    url: '/audio/lofi5.mp3'
+  },
+  {
+    id: 'lofi6',
+    name: {
+      en: 'Relaxing Music #6',
+      zh: '舒缓的音乐#6'
+    },
+    url: '/audio/lofi6.mp3'
+  },
+  {
+    id: 'cafe',
+    name: {
+      en: 'Cafe Ambience',
+      zh: '咖啡馆氛围'
+    },
+    url: '/audio/cafe.mp3'
+  },
+  {
+    id: 'cafeteria',
+    name: {
+      en: 'Cafeteria Sounds',
+      zh: '食堂环境音'
+    },
+    url: '/audio/cafeteria.mp3'
   }
 ];
 
@@ -66,6 +98,22 @@ export const noiseTracks: AudioTrack[] = [
       zh: '雨声'
     },
     url: '/audio/rain.mp3'
+  },
+  {
+    id: 'ocean',
+    name: {
+      en: 'Deep Ocean',
+      zh: '深海'
+    },
+    url: '/audio/ocean.mp3'
+  },
+  {
+    id: 'alarm',
+    name: {
+      en: 'Meditation Bell',
+      zh: '冥想钟声'
+    },
+    url: '/audio/alarm.mp3'
   }
 ];
 
@@ -86,18 +134,18 @@ class AudioManager {
       if (this.musicAudio?.src === url && this.isPlayingMusic) {
         return;
       }
-      
+
       // Stop current audio before creating new one
       if (this.musicAudio) {
         this.musicAudio.pause();
         this.musicAudio = null;
       }
-      
+
       this.musicAudio = new Audio(url);
       this.currentMusicUrl = url;
       this.musicAudio.loop = true;
       this.musicAudio.volume = this.musicVolume;
-      
+
       try {
         await this.musicAudio.play();
         this.isPlayingMusic = true;
@@ -118,18 +166,18 @@ class AudioManager {
       if (this.noiseAudio?.src === url && this.isPlayingNoise) {
         return;
       }
-      
+
       // Stop current audio before creating new one
       if (this.noiseAudio) {
         this.noiseAudio.pause();
         this.noiseAudio = null;
       }
-      
+
       this.noiseAudio = new Audio(url);
       this.currentNoiseUrl = url;
       this.noiseAudio.loop = true;
       this.noiseAudio.volume = this.noiseVolume;
-      
+
       try {
         await this.noiseAudio.play();
         this.isPlayingNoise = true;
@@ -184,7 +232,7 @@ class AudioManager {
     if (!this.needsUserInteraction) {
       return;
     }
-    
+
     if (this.currentMusicUrl) {
       try {
         if (!this.isPlayingMusic) {
