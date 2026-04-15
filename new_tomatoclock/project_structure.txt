@@ -1,0 +1,32 @@
+new_tomatoclock/
+├── main.py                # 程序入口
+├── requirements.txt       # 依赖文件
+├── README.md              # 项目说明
+├── config/                # 配置文件
+│   └── settings.ini
+├── core/                  # 核心逻辑
+│   ├── __init__.py
+│   ├── timer.py           # 计时器逻辑
+│   ├── task_manager.py    # 任务管理
+│   ├── achievement.py     # 成就系统
+│   └── statistics.py      # 数据统计
+├── models/                # 数据模型
+│   ├── __init__.py
+│   ├── task.py
+│   ├── user.py
+│   └── record.py
+├── utils/                 # 工具类
+│   ├── __init__.py
+│   ├── audio.py           # 音频处理
+│   ├── db.py              # 数据库操作
+│   └── logger.py          # 日志记录
+├── views/                 # 界面相关
+│   ├── __init__.py
+│   ├── main_window.py     # 主界面
+│   ├── chart_window.py    # 统计图表
+│   └── task_window.py     # 任务管理界面
+└── tests/                 # 单元测试
+    ├── __init__.py
+    ├── test_timer.py
+    ├── test_task.py
+    └── test_achievement.py

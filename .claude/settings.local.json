@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run *)",
+      "Bash(npm install *)",
+      "Bash(start *)",
+      "Bash(netstat -ano)",
+      "Bash(findstr \":5173\")",
+      "Bash(npx vite *)",
+      "Bash(cp -r /tmp/pomodoro-remote/src D:/Code/tomatoclock/)",
+      "Bash(cp /tmp/pomodoro-remote/package.json D:/Code/tomatoclock/)",
+      "Bash(cp /tmp/pomodoro-remote/package-lock.json D:/Code/tomatoclock/)",
+      "Bash(cp /tmp/pomodoro-remote/vite.config.ts D:/Code/tomatoclock/)",
+      "Bash(cp /tmp/pomodoro-remote/tsconfig.json D:/Code/tomatoclock/)",
+      "WebFetch(domain:getdesign.md)",
+      "Bash(npx getdesign@latest add notion --yes)",
+      "Bash(npx getdesign@latest add notion)",
+      "Bash(npx getdesign@latest add lamborghini)",
+      "Bash(npx getdesign@latest add figma)",
+      "Bash(curl -s http://localhost:3000)"
+    ]
+  }
+}

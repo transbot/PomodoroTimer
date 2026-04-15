@@ -1,0 +1,122 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Skin System - Two distinctive themes */
+
+/* Notion Skin - Warm minimalist light theme */
+.skin-notion {
+  --color-bg-primary: #ffffff;
+  --color-bg-secondary: #f6f5f4;
+  --color-bg-card: #ffffff;
+  --color-text-primary: rgba(0, 0, 0, 0.95);
+  --color-text-secondary: #615d59;
+  --color-text-muted: #a39e98;
+  --color-accent: #0075de;
+  --color-accent-hover: #005bab;
+  --color-border: rgba(0, 0, 0, 0.1);
+  --color-success: #1aae39;
+  --color-break: #2a9d99;
+  --radius-button: 4px;
+  --radius-card: 12px;
+  --shadow-card: 0px 4px 18px rgba(0, 0, 0, 0.04), 0px 2px 7px rgba(0, 0, 0, 0.027), 0px 1px 3px rgba(0, 0, 0, 0.02);
+}
+
+/* Lamborghini Skin - Dark luxury with gold accent */
+.skin-lamborghini {
+  --color-bg-primary: #000000;
+  --color-bg-secondary: #181818;
+  --color-bg-card: #202020;
+  --color-text-primary: #ffffff;
+  --color-text-secondary: #f5f5f5;
+  --color-text-muted: #7d7d7d;
+  --color-accent: #ffc000;
+  --color-accent-hover: #917300;
+  --color-border: rgba(255, 255, 255, 0.1);
+  --color-success: #1aae39;
+  --color-break: #29abe2;
+  --radius-button: 0px;
+  --radius-card: 0px;
+  --shadow-card: none;
+}
+
+/* Base skin styles */
+.skin-notion,
+.skin-lamborghini,
+.skin-figma {
+  background-color: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Card styles per skin */
+.skin-card {
+  background-color: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+}
+
+/* Button styles */
+.skin-button-primary {
+  background-color: var(--color-accent);
+  color: var(--color-bg-primary);
+  border-radius: var(--radius-button);
+  transition: all 0.2s ease;
+}
+
+.skin-button-primary:hover {
+  background-color: var(--color-accent-hover);
+}
+
+.skin-button-secondary {
+  background-color: transparent;
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-button);
+  transition: all 0.2s ease;
+}
+
+.skin-button-secondary:hover {
+  background-color: var(--color-bg-secondary);
+}
+
+/* Timer display */
+.skin-timer-display {
+  color: var(--color-text-primary);
+}
+
+/* Work mode button */
+.skin-work-btn {
+  background-color: var(--color-accent);
+  color: var(--color-bg-primary);
+  border-radius: var(--radius-button);
+}
+
+/* Break mode button */
+.skin-break-btn {
+  background-color: var(--color-break);
+  color: var(--color-bg-primary);
+  border-radius: var(--radius-button);
+}
+
+/* Input styles */
+.skin-input {
+  background-color: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-button);
+}
+
+.skin-input:focus {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* Select styles */
+.skin-select {
+  background-color: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-button);
+}
