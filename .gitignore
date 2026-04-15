@@ -54,3 +54,6 @@ base_library.zip
 
 # Claude local settings
 .claude/settings.local.json
+
+# Bolt (AI tool config)
+.bolt/
