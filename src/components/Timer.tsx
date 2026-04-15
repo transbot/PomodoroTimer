@@ -5,6 +5,7 @@ import { AudioControls } from './AudioControls';
 import { audioManager, musicTracks, noiseTracks, loadAudioSelections, saveAudioSelections } from '../utils/audio';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useStatistics } from '../contexts/StatisticsContext';
+import { getDevModeConfig, isDevelopment } from '../utils/devMode';
 
 type TimerMode = 'work' | 'break';
 
@@ -28,6 +29,16 @@ export function Timer({ workTime, breakTime }: TimerProps) {
   // Track current session for statistics
   const currentSessionIdRef = useRef<string | null>(null);
   const sessionDurationRef = useRef<number>(workTime);
+  const devModeRef = useRef(getDevModeConfig());
+
+  // Update dev mode config on focus
+  useEffect(() => {
+    const updateDevMode = () => {
+      devModeRef.current = getDevModeConfig();
+    };
+    window.addEventListener('focus', updateDevMode);
+    return () => window.removeEventListener('focus', updateDevMode);
+  }, []);
 
   // Handle audio playback based on mode and timer state
   useEffect(() => {
@@ -175,9 +186,18 @@ export function Timer({ workTime, breakTime }: TimerProps) {
     let interval: number;
 
     if (isRunning && timeLeft > 0) {
+      // Get current dev mode config
+      const devConfig = getDevModeConfig();
+      const timeScale = (isDevelopment() && devConfig.enabled) ? devConfig.timeScale : 1;
+
+      // Calculate interval based on time scale
+      // Normal: 1000ms per second
+      // 60x: 1000/60 ≈ 16.67ms per second (1 real second = 1 virtual minute)
+      const intervalMs = Math.max(16, Math.floor(1000 / timeScale));
+
       interval = window.setInterval(() => {
         setTimeLeft((time) => time - 1);
-      }, 1000);
+      }, intervalMs);
     } else if (timeLeft === 0) {
       setIsRunning(false);
 
@@ -205,8 +225,19 @@ export function Timer({ workTime, breakTime }: TimerProps) {
 
   const { minutes, seconds } = formatTime(timeLeft);
 
+  // Dev mode indicator
+  const devConfig = getDevModeConfig();
+  const showDevIndicator = isDevelopment() && devConfig.enabled && devConfig.timeScale > 1;
+
   return (
     <div className="flex flex-col items-center space-y-8">
+      {/* Dev mode speed indicator */}
+      {showDevIndicator && (
+        <div className="px-3 py-1 bg-amber-100 text-amber-700 rounded-full text-sm font-medium animate-pulse">
+          ⚡ {devConfig.timeScale}x Speed
+        </div>
+      )}
+
       <div className="flex items-center space-x-4">
         <button
           onClick={switchMode}

@@ -10,6 +10,8 @@ import { SkinProvider } from './contexts/SkinContext';
 import { StatisticsProvider } from './contexts/StatisticsContext';
 import { StatisticsModal } from './components/StatisticsModal';
 import { Footer } from './components/Footer';
+import { DevModePanel } from './components/DevModePanel';
+import { isDevelopment } from './utils/devMode';
 
 function AppContent() {
   const { t } = useLanguage();
@@ -55,6 +57,9 @@ function AppContent() {
       </div>
 
       <StatisticsModal isOpen={showStats} onClose={() => setShowStats(false)} />
+
+      {/* Dev mode panel - only in development */}
+      {isDevelopment() && <DevModePanel />}
     </div>
   );
 }
