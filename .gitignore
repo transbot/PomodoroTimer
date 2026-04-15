@@ -7,11 +7,19 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+# Dependencies
 node_modules
+
+# Build outputs
 dist
-.env
 dist-ssr
 *.local
+build/
+
+# Environment files
+.env
+.env.local
+.env.*.local
 
 # Editor directories and files
 .vscode/*
@@ -23,3 +31,26 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Binary and archive files
+*.exe
+*.rar
+*.zip
+*.7z
+*.pkg
+*.pyz
+*.pyc
+__pycache__/
+
+# PyInstaller
+*.spec
+*.toc
+warn-*.txt
+xref-*.html
+base_library.zip
+
+# OMC internal files
+.omc/
+
+# Claude local settings
+.claude/settings.local.json
