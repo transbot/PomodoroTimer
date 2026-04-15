@@ -2,7 +2,7 @@ import React from 'react';
 import { useStatistics } from '../contexts/StatisticsContext';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useSkin } from '../contexts/SkinContext';
-import { Flame, Trophy, Clock, TrendingUp, Star } from 'lucide-react';
+import { Flame, Trophy, Clock, TrendingUp, Star, CheckCircle2 } from 'lucide-react';
 
 export function StatisticsPanel() {
   const { userStats, dailyStats, weeklyStats, xpProgress } = useStatistics();
@@ -23,6 +23,9 @@ export function StatisticsPanel() {
       dailyAvg: { en: 'Daily Avg', zh: '日均' },
       totalFocus: { en: 'Total Focus', zh: '累计专注' },
       hours: { en: 'hrs', zh: '小时' },
+      checkedIn: { en: "Today's goal complete!", zh: '今日目标已完成！' },
+      notCheckedIn: { en: 'Complete a pomodoro to check in', zh: '完成一个番茄钟即可打卡' },
+      keepGoing: { en: 'Keep the streak going!', zh: '继续保持！' },
     };
     return translations[key]?.[language] || key;
   };
@@ -34,6 +37,9 @@ export function StatisticsPanel() {
     if (mins === 0) return `${hrs}${t('hours')}`;
     return `${hrs}${t('hours')} ${mins}${t('minutes')}`;
   };
+
+  // Check if today has any completed sessions
+  const todayCheckedIn = dailyStats.workSessions > 0;
 
   return (
     <div className="space-y-6">
@@ -69,6 +75,37 @@ export function StatisticsPanel() {
           </div>
         </div>
         <Star className="w-5 h-5 text-[var(--color-accent)]" />
+      </div>
+
+      {/* Today's Check-in Status */}
+      <div
+        className={`p-4 rounded-lg flex items-center justify-between ${
+          todayCheckedIn ? 'bg-green-50' : 'bg-[var(--color-bg-secondary)]'
+        }`}
+        style={{ borderRadius: 'var(--radius-card)' }}
+      >
+        <div className="flex items-center gap-3">
+          {todayCheckedIn ? (
+            <CheckCircle2 className="w-8 h-8 text-green-500" />
+          ) : (
+            <div className="w-8 h-8 rounded-full border-2 border-dashed border-[var(--color-text-muted)]" />
+          )}
+          <div>
+            <div className={`font-medium ${todayCheckedIn ? 'text-green-700' : 'text-[var(--color-text-primary)]'}`}>
+              {todayCheckedIn ? t('checkedIn') : t('notCheckedIn')}
+            </div>
+            {userStats.currentStreak > 0 && todayCheckedIn && (
+              <div className="text-sm text-green-600">
+                🔥 {t('keepGoing')}
+              </div>
+            )}
+          </div>
+        </div>
+        {todayCheckedIn && (
+          <div className="text-2xl font-bold text-green-600">
+            +{dailyStats.workSessions}
+          </div>
+        )}
       </div>
 
       {/* Stats Grid */}
