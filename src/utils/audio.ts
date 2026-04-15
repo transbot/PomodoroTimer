@@ -62,16 +62,16 @@ export const noiseTracks: AudioTrack[] = [
   {
     id: 'cafe',
     name: {
-      en: 'Cafe Ambience',
-      zh: '咖啡馆氛围'
+      en: 'Cafe',
+      zh: '咖啡馆'
     },
     url: '/audio/cafe.mp3'
   },
   {
     id: 'cafeteria',
     name: {
-      en: 'Cafeteria Sounds',
-      zh: '食堂环境音'
+      en: 'Cafeteria',
+      zh: '食堂'
     },
     url: '/audio/cafeteria.mp3'
   },
