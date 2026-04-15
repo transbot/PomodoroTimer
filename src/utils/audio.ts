@@ -106,14 +106,6 @@ export const noiseTracks: AudioTrack[] = [
       zh: '深海'
     },
     url: '/audio/ocean.mp3'
-  },
-  {
-    id: 'alarm',
-    name: {
-      en: 'Meditation Bell',
-      zh: '冥想钟声'
-    },
-    url: '/audio/alarm.mp3'
   }
 ];
 
