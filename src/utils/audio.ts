@@ -1,3 +1,6 @@
+// Remote audio base URL (Cloudflare R2)
+const AUDIO_BASE_URL = 'https://pub-113522b8fe254ef0a7a653d9e1b445ad.r2.dev/audio';
+
 export interface AudioTrack {
   id: string;
   name: {
@@ -14,7 +17,7 @@ export const musicTracks: AudioTrack[] = [
       en: 'Relaxing Music #1',
       zh: '舒缓的音乐#1'
     },
-    url: '/audio/lofi1.mp3'
+    url: `${AUDIO_BASE_URL}/lofi1.mp3`
   },
   {
     id: 'lofi2',
@@ -22,7 +25,7 @@ export const musicTracks: AudioTrack[] = [
       en: 'Relaxing Music #2',
       zh: '舒缓的音乐#2'
     },
-    url: '/audio/lofi2.mp3'
+    url: `${AUDIO_BASE_URL}/lofi2.mp3`
   },
   {
     id: 'lofi3',
@@ -30,7 +33,7 @@ export const musicTracks: AudioTrack[] = [
       en: 'Relaxing Music #3',
       zh: '舒缓的音乐#3'
     },
-    url: '/audio/lofi3.mp3'
+    url: `${AUDIO_BASE_URL}/lofi3.mp3`
   },
   {
     id: 'lofi4',
@@ -38,7 +41,7 @@ export const musicTracks: AudioTrack[] = [
       en: 'Relaxing Music #4',
       zh: '舒缓的音乐#4'
     },
-    url: '/audio/lofi4.mp3'
+    url: `${AUDIO_BASE_URL}/lofi4.mp3`
   },
   {
     id: 'lofi5',
@@ -46,7 +49,7 @@ export const musicTracks: AudioTrack[] = [
       en: 'Relaxing Music #5',
       zh: '舒缓的音乐#5'
     },
-    url: '/audio/lofi5.mp3'
+    url: `${AUDIO_BASE_URL}/lofi5.mp3`
   },
   {
     id: 'lofi6',
@@ -54,7 +57,7 @@ export const musicTracks: AudioTrack[] = [
       en: 'Relaxing Music #6',
       zh: '舒缓的音乐#6'
     },
-    url: '/audio/lofi6.mp3'
+    url: `${AUDIO_BASE_URL}/lofi6.mp3`
   }
 ];
 
@@ -65,7 +68,7 @@ export const noiseTracks: AudioTrack[] = [
       en: 'Cafe',
       zh: '咖啡馆'
     },
-    url: '/audio/cafe.mp3'
+    url: `${AUDIO_BASE_URL}/cafe.mp3`
   },
   {
     id: 'cafeteria',
@@ -73,7 +76,7 @@ export const noiseTracks: AudioTrack[] = [
       en: 'Cafeteria',
       zh: '食堂'
     },
-    url: '/audio/cafeteria.mp3'
+    url: `${AUDIO_BASE_URL}/cafeteria.mp3`
   },
   {
     id: 'waves',
@@ -81,7 +84,7 @@ export const noiseTracks: AudioTrack[] = [
       en: 'Ocean Waves',
       zh: '海浪声'
     },
-    url: '/audio/waves.mp3'
+    url: `${AUDIO_BASE_URL}/waves.mp3`
   },
   {
     id: 'birds',
@@ -89,7 +92,7 @@ export const noiseTracks: AudioTrack[] = [
       en: 'Bird Songs',
       zh: '鸟鸣'
     },
-    url: '/audio/bird.mp3'
+    url: `${AUDIO_BASE_URL}/bird.mp3`
   },
   {
     id: 'rain',
@@ -97,7 +100,7 @@ export const noiseTracks: AudioTrack[] = [
       en: 'Rain Sounds',
       zh: '雨声'
     },
-    url: '/audio/rain.mp3'
+    url: `${AUDIO_BASE_URL}/rain.mp3`
   },
   {
     id: 'ocean',
@@ -105,7 +108,7 @@ export const noiseTracks: AudioTrack[] = [
       en: 'Deep Ocean',
       zh: '深海'
     },
-    url: '/audio/ocean.mp3'
+    url: `${AUDIO_BASE_URL}/ocean.mp3`
   }
 ];
 
