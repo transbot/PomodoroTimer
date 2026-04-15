@@ -57,3 +57,4 @@ base_library.zip
 
 # Bolt (AI tool config)
 .bolt/
+*.txt

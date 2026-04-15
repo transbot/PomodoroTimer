@@ -55,7 +55,10 @@ export const musicTracks: AudioTrack[] = [
       zh: '舒缓的音乐#6'
     },
     url: '/audio/lofi6.mp3'
-  },
+  }
+];
+
+export const noiseTracks: AudioTrack[] = [
   {
     id: 'cafe',
     name: {
@@ -71,10 +74,7 @@ export const musicTracks: AudioTrack[] = [
       zh: '食堂环境音'
     },
     url: '/audio/cafeteria.mp3'
-  }
-];
-
-export const noiseTracks: AudioTrack[] = [
+  },
   {
     id: 'waves',
     name: {
