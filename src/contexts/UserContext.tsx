@@ -1,8 +1,6 @@
 import React, { createContext, useContext, useEffect, useState, useCallback } from 'react';
 import {
   initializeAuth,
-  getCurrentAuthUserId,
-  registerUser,
   getUser,
   isSupabaseConfigured,
   CloudUser,
@@ -25,38 +23,56 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
   const isConfigured = isSupabaseConfigured();
 
-  const refreshUser = useCallback(async () => {
-    if (!isConfigured) {
-      setIsLoading(false);
-      return;
-    }
-
-    try {
-      // Initialize anonymous auth
-      const authId = await initializeAuth();
-      if (!authId) {
+  // Initial auth setup (runs once)
+  useEffect(() => {
+    const initAuth = async () => {
+      if (!isConfigured) {
         setIsLoading(false);
         return;
       }
 
-      setUserId(authId);
+      try {
+        const authId = await initializeAuth();
+        if (!authId) {
+          setIsLoading(false);
+          return;
+        }
 
-      // Try to get or register user profile
-      let user = await getUser(authId);
-      if (!user) {
-        user = await registerUser(authId);
+        setUserId(authId);
+
+        // Try to get or register user profile
+        let user = await getUser(authId);
+        if (!user) {
+          // Import registerUser only when needed
+          const { registerUser } = await import('../services');
+          user = await registerUser(authId);
+        }
+        setCloudUser(user);
+      } catch (error) {
+        console.error('Failed to initialize user:', error);
+      } finally {
+        setIsLoading(false);
       }
-      setCloudUser(user);
-    } catch (error) {
-      console.error('Failed to initialize user:', error);
-    } finally {
-      setIsLoading(false);
-    }
+    };
+
+    initAuth();
   }, [isConfigured]);
 
-  useEffect(() => {
-    refreshUser();
-  }, [refreshUser]);
+  // Fast refresh - only fetch user data, don't re-init auth
+  const refreshUser = useCallback(async () => {
+    if (!isConfigured || !userId) {
+      return;
+    }
+
+    try {
+      const user = await getUser(userId);
+      if (user) {
+        setCloudUser(user);
+      }
+    } catch (error) {
+      console.error('Failed to refresh user:', error);
+    }
+  }, [isConfigured, userId]);
 
   return (
     <UserContext.Provider
