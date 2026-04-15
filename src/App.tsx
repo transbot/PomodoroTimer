@@ -7,8 +7,11 @@ import { LanguageSwitch } from './components/LanguageSwitch';
 import { useLanguage } from './contexts/LanguageContext';
 import { SkinSwitch } from './components/SkinSwitch';
 import { SkinProvider } from './contexts/SkinContext';
-import { StatisticsProvider } from './contexts/StatisticsContext';
+import { StatisticsProvider, useStatistics } from './contexts/StatisticsContext';
+import { UserProvider } from './contexts/UserContext';
+import { LeaderboardProvider } from './contexts/LeaderboardContext';
 import { StatisticsModal } from './components/StatisticsModal';
+import { AchievementNotification } from './components/AchievementsPanel';
 import { Footer } from './components/Footer';
 import { DevModePanel } from './components/DevModePanel';
 import { isDevelopment } from './utils/devMode';
@@ -16,6 +19,7 @@ import { isDevelopment } from './utils/devMode';
 function AppContent() {
   const { t } = useLanguage();
   const [showStats, setShowStats] = useState(false);
+  const { newAchievements, dismissAchievement } = useStatistics();
 
   const [workTime, setWorkTime] = useState(25);
   const [breakTime, setBreakTime] = useState(5);
@@ -58,6 +62,14 @@ function AppContent() {
 
       <StatisticsModal isOpen={showStats} onClose={() => setShowStats(false)} />
 
+      {/* Achievement notifications - shown globally */}
+      {newAchievements.length > 0 && (
+        <AchievementNotification
+          achievement={newAchievements[0]}
+          onClose={dismissAchievement}
+        />
+      )}
+
       {/* Dev mode panel - only in development */}
       {isDevelopment() && <DevModePanel />}
     </div>
@@ -68,9 +80,13 @@ function App() {
   return (
     <LanguageProvider>
       <SkinProvider>
-        <StatisticsProvider>
-          <AppContent />
-        </StatisticsProvider>
+        <UserProvider>
+          <LeaderboardProvider>
+            <StatisticsProvider>
+              <AppContent />
+            </StatisticsProvider>
+          </LeaderboardProvider>
+        </UserProvider>
       </SkinProvider>
     </LanguageProvider>
   );

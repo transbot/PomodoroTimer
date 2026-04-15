@@ -15,6 +15,7 @@ import {
   getAllAchievementsWithStatus,
   getXpProgress,
 } from '../utils/statistics';
+import { syncStats, isSupabaseConfigured } from '../services';
 
 interface StatisticsContextType {
   // Session management
@@ -35,6 +36,7 @@ interface StatisticsContextType {
   achievements: Array<Achievement & { unlocked: boolean }>;
   newAchievements: Achievement[];
   clearNewAchievements: () => void;
+  dismissAchievement: () => void;
 
   // Refresh
   refreshStats: () => void;
@@ -101,6 +103,11 @@ export function StatisticsProvider({ children }: { children: React.ReactNode }) 
     }
 
     refreshStats();
+
+    // Sync to cloud in background (non-blocking)
+    if (isSupabaseConfigured()) {
+      syncStats().catch(err => console.error('Background sync failed:', err));
+    }
   }, [refreshStats]);
 
   const cancelSession = useCallback((sessionId: string) => {
@@ -122,6 +129,10 @@ export function StatisticsProvider({ children }: { children: React.ReactNode }) 
 
   const clearNewAchievements = useCallback(() => {
     setNewAchievements([]);
+  }, []);
+
+  const dismissAchievement = useCallback(() => {
+    setNewAchievements(prev => prev.slice(1));
   }, []);
 
   // Refresh stats on mount and when window gains focus
@@ -147,6 +158,7 @@ export function StatisticsProvider({ children }: { children: React.ReactNode }) 
         achievements,
         newAchievements,
         clearNewAchievements,
+        dismissAchievement,
         refreshStats,
       }}
     >

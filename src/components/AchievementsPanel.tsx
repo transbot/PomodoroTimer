@@ -80,12 +80,13 @@ export function AchievementNotification({
 
   return (
     <div
-      className="fixed bottom-4 right-4 p-4 rounded-lg shadow-lg animate-bounce z-50"
+      className="fixed bottom-4 right-4 p-4 rounded-lg shadow-lg animate-bounce z-50 cursor-pointer"
       style={{
         backgroundColor: 'var(--color-bg-card)',
         border: '1px solid var(--color-accent)',
         borderRadius: 'var(--radius-card)',
       }}
+      onClick={onClose}
     >
       <div className="flex items-center gap-3">
         <span className="text-3xl">{achievement.icon}</span>
@@ -101,7 +102,10 @@ export function AchievementNotification({
           </div>
         </div>
         <button
-          onClick={onClose}
+          onClick={(e) => {
+            e.stopPropagation();
+            onClose();
+          }}
           className="p-1 hover:opacity-70"
         >
           <X className="w-5 h-5 text-[var(--color-text-muted)]" />

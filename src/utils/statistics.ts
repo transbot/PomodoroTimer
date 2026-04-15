@@ -460,3 +460,43 @@ export function getAllAchievementsWithStatus(): Array<Achievement & { unlocked: 
   const unlocked = getUnlockedAchievements();
   return ACHIEVEMENTS.map(a => ({ ...a, unlocked: unlocked.includes(a.id) }));
 }
+
+// Dev mode achievement operations
+export function unlockAllAchievements(): Achievement[] {
+  const unlocked = getUnlockedAchievements();
+  const newlyUnlocked: Achievement[] = [];
+
+  ACHIEVEMENTS.forEach(achievement => {
+    if (!unlocked.includes(achievement.id)) {
+      unlocked.push(achievement.id);
+      newlyUnlocked.push(achievement);
+    }
+  });
+
+  localStorage.setItem(STORAGE_KEYS.ACHIEVEMENTS, JSON.stringify(unlocked));
+  return newlyUnlocked;
+}
+
+export function resetAchievements(): void {
+  localStorage.removeItem(STORAGE_KEYS.ACHIEVEMENTS);
+}
+
+export function resetAllStats(): void {
+  localStorage.removeItem(STORAGE_KEYS.SESSIONS);
+  localStorage.removeItem(STORAGE_KEYS.USER_STATS);
+  localStorage.removeItem(STORAGE_KEYS.ACHIEVEMENTS);
+}
+
+export function unlockOneAchievement(): Achievement | null {
+  const unlocked = getUnlockedAchievements();
+
+  for (const achievement of ACHIEVEMENTS) {
+    if (!unlocked.includes(achievement.id)) {
+      unlocked.push(achievement.id);
+      localStorage.setItem(STORAGE_KEYS.ACHIEVEMENTS, JSON.stringify(unlocked));
+      return achievement;
+    }
+  }
+
+  return null; // All achievements already unlocked
+}

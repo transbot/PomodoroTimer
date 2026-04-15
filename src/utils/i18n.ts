@@ -41,6 +41,11 @@ export const translations = {
     achievementUnlocked: 'Achievement Unlocked!',
     // Tabs
     overview: 'Overview',
+    // Leaderboard
+    leaderboard: 'Leaderboard',
+    rank: 'Rank',
+    yourRank: 'Your Rank',
+    notRanked: 'Complete more sessions to rank',
   },
   zh: {
     title: '番茄时钟',
@@ -82,5 +87,10 @@ export const translations = {
     achievementUnlocked: '解锁新成就！',
     // Tabs
     overview: '概览',
+    // Leaderboard
+    leaderboard: '排行榜',
+    rank: '排名',
+    yourRank: '你的排名',
+    notRanked: '完成更多番茄钟以获得排名',
   }
 };

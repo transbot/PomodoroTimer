@@ -1,23 +1,25 @@
 import React, { useState } from 'react';
-import { BarChart3, Trophy, X } from 'lucide-react';
+import { BarChart3, Trophy, X, Users } from 'lucide-react';
 import { StatisticsPanel } from './StatisticsPanel';
 import { Heatmap } from './Heatmap';
-import { AchievementsPanel, AchievementNotification } from './AchievementsPanel';
+import { AchievementsPanel } from './AchievementsPanel';
+import { LeaderboardPanel } from './LeaderboardPanel';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useStatistics } from '../contexts/StatisticsContext';
 
-type Tab = 'stats' | 'achievements';
+type Tab = 'stats' | 'achievements' | 'leaderboard';
 
 export function StatisticsModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
   const [activeTab, setActiveTab] = useState<Tab>('stats');
   const { language } = useLanguage();
-  const { newAchievements, clearNewAchievements } = useStatistics();
+  const { newAchievements } = useStatistics();
 
   const t = (key: string) => {
     const translations: Record<string, Record<string, string>> = {
       title: { en: 'Statistics', zh: '统计' },
       stats: { en: 'Overview', zh: '概览' },
       achievements: { en: 'Achievements', zh: '成就' },
+      leaderboard: { en: 'Leaderboard', zh: '排行榜' },
     };
     return translations[key]?.[language] || key;
   };
@@ -25,12 +27,10 @@ export function StatisticsModal({ isOpen, onClose }: { isOpen: boolean; onClose:
   if (!isOpen) return null;
 
   return (
-    <>
-      {/* Modal */}
-      <div
-        className="fixed inset-0 z-40 flex items-center justify-center p-4"
-        onClick={onClose}
-      >
+    <div
+      className="fixed inset-0 z-40 flex items-center justify-center p-4"
+      onClick={onClose}
+    >
         <div className="absolute inset-0 bg-black/50" />
         <div
           className="relative w-full max-w-lg skin-card p-6 z-10"
@@ -55,7 +55,7 @@ export function StatisticsModal({ isOpen, onClose }: { isOpen: boolean; onClose:
           <div className="flex gap-2 mb-6">
             <button
               onClick={() => setActiveTab('stats')}
-              className={`flex-1 py-2 px-4 transition-colors ${
+              className={`flex-1 py-2 px-3 transition-colors text-sm ${
                 activeTab === 'stats' ? 'font-semibold' : ''
               }`}
               style={{
@@ -68,7 +68,7 @@ export function StatisticsModal({ isOpen, onClose }: { isOpen: boolean; onClose:
             </button>
             <button
               onClick={() => setActiveTab('achievements')}
-              className={`flex-1 py-2 px-4 transition-colors flex items-center justify-center gap-2 ${
+              className={`flex-1 py-2 px-3 transition-colors flex items-center justify-center gap-1 text-sm ${
                 activeTab === 'achievements' ? 'font-semibold' : ''
               }`}
               style={{
@@ -85,6 +85,20 @@ export function StatisticsModal({ isOpen, onClose }: { isOpen: boolean; onClose:
                 </span>
               )}
             </button>
+            <button
+              onClick={() => setActiveTab('leaderboard')}
+              className={`flex-1 py-2 px-3 transition-colors flex items-center justify-center gap-1 text-sm ${
+                activeTab === 'leaderboard' ? 'font-semibold' : ''
+              }`}
+              style={{
+                backgroundColor: activeTab === 'leaderboard' ? 'var(--color-accent)' : 'var(--color-bg-secondary)',
+                color: activeTab === 'leaderboard' ? 'var(--color-bg-primary)' : 'var(--color-text-primary)',
+                borderRadius: 'var(--radius-button)',
+              }}
+            >
+              <Users className="w-4 h-4" />
+              {t('leaderboard')}
+            </button>
           </div>
 
           {/* Content */}
@@ -98,24 +112,11 @@ export function StatisticsModal({ isOpen, onClose }: { isOpen: boolean; onClose:
             {activeTab === 'achievements' && (
               <AchievementsPanel />
             )}
+            {activeTab === 'leaderboard' && (
+              <LeaderboardPanel />
+            )}
           </div>
         </div>
       </div>
-
-      {/* Achievement notifications */}
-      {newAchievements.length > 0 && (
-        <AchievementNotification
-          achievement={newAchievements[0]}
-          onClose={() => {
-            const remaining = newAchievements.slice(1);
-            if (remaining.length === 0) {
-              clearNewAchievements();
-            } else {
-              // Show next achievement
-            }
-          }}
-        />
-      )}
-    </>
   );
 }
