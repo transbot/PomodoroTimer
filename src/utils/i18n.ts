@@ -2,7 +2,7 @@ export type Language = 'en' | 'zh';
 
 export const translations = {
   en: {
-    title: 'Pomodoro Timer',
+    title: 'Zen Tomato',
     subtitle: 'Stay focused and productive with the Pomodoro Technique',
     workTime: 'Work Time',
     breakTime: 'Break Time',
@@ -48,7 +48,7 @@ export const translations = {
     notRanked: 'Complete more sessions to rank',
   },
   zh: {
-    title: '番茄时钟',
+    title: '简智-番茄钟',
     subtitle: '使用番茄工作法保持专注和高效',
     workTime: '工作时间',
     breakTime: '休息时间',

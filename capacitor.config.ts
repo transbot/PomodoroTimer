@@ -2,7 +2,7 @@ import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
   appId: 'com.tomatoclock.app',
-  appName: 'TomatoClock',
+  appName: '简智-番茄钟',
   webDir: 'dist',
   server: {
     // Allow navigation to external URLs (Supabase, R2, etc.)
